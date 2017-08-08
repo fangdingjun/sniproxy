@@ -1,0 +1,13 @@
+
+
+timeout: 10
+default: 127.0.0.1:8443
+
+listen:
+    - 443
+    - 9999
+
+forward_rules:
+    www.example.com: 127.0.0.1:8443
+    b.example.com: 127.0.0.1:8541
+    "*:9999": "*:443"
