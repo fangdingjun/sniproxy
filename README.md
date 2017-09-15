@@ -3,7 +3,7 @@ Sniproxy
 
 A SNI proxy implements by golang
 
-it can forward the TLS request to deferent backend by deferent SNI name
+it can forward the TLS request to different backend by different SNI name
 
 
 Usage
