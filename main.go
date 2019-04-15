@@ -2,10 +2,14 @@ package main
 
 import (
 	"fmt"
-	"github.com/go-yaml/yaml"
-	"github.com/golang/glog"
 	"io"
 	"io/ioutil"
+	"strings"
+
+	"github.com/go-yaml/yaml"
+	"github.com/golang/glog"
+	proxyproto "github.com/pires/go-proxyproto"
+
 	//"crypto/tls"
 	"flag"
 	//"log"
@@ -56,13 +60,47 @@ func getSNIServerName(buf []byte) string {
 }
 
 func forward(c net.Conn, data []byte, dst string) {
-	c1, err := net.Dial("tcp", dst)
+	addr := dst
+	proxyProto := 0
+
+	ss := strings.Fields(dst)
+
+	var hdr proxyproto.Header
+
+	if len(ss) > 1 {
+		addr = ss[0]
+		raddr := c.RemoteAddr().(*net.TCPAddr)
+		hdr = proxyproto.Header{
+			Version:            1,
+			Command:            proxyproto.PROXY,
+			TransportProtocol:  proxyproto.TCPv4,
+			SourceAddress:      raddr.IP.To4(),
+			DestinationAddress: net.IP{0, 0, 0, 0},
+			SourcePort:         uint16(raddr.Port),
+			DestinationPort:    0,
+		}
+
+		switch strings.ToLower(ss[1]) {
+		case "proxy-v1":
+			proxyProto = 1
+			hdr.Version = 1
+		case "proxy-v2":
+			proxyProto = 2
+			hdr.Version = 2
+		}
+	}
+
+	c1, err := net.Dial("tcp", addr)
 	if err != nil {
 		glog.Error(err)
 		return
 	}
 
 	defer c1.Close()
+
+	if proxyProto != 0 {
+		hdr.WriteTo(c1)
+	}
 
 	if _, err = c1.Write(data); err != nil {
 		glog.Error(err)
