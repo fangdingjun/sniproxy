@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/go-yaml/yaml"
 	"io/ioutil"
 	"testing"
+
+	yaml "gopkg.in/yaml.v2"
 )
 
 func TestConf(t *testing.T) {
@@ -18,8 +19,8 @@ func TestConf(t *testing.T) {
 	}
 	fmt.Printf("%+v\n", c)
 	var testdata = map[string]string{
-		"www.example.com": "127.0.0.1:8443",
-		"b.example.com":   "127.0.0.1:8541",
+		"www.example.com": "127.0.0.1:8443 proxy-v2",
+		"b.example.com":   "127.0.0.1:8542",
 	}
 	r := forwardRules(c.ForwardRules)
 	for k, v := range testdata {

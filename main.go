@@ -1,19 +1,16 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io"
 	"io/ioutil"
+	"net"
 	"strings"
 
-	"github.com/go-yaml/yaml"
-	"github.com/golang/glog"
+	glog "github.com/fangdingjun/go-log"
 	proxyproto "github.com/pires/go-proxyproto"
-
-	//"crypto/tls"
-	"flag"
-	//"log"
-	"net"
+	yaml "gopkg.in/yaml.v2"
 )
 
 func getSNIServerName(buf []byte) string {
@@ -99,6 +96,7 @@ func forward(c net.Conn, data []byte, dst string) {
 	defer c1.Close()
 
 	if proxyProto != 0 {
+		glog.Debugf("send proxy proto v%d to %s", proxyProto, addr)
 		hdr.WriteTo(c1)
 	}
 
@@ -143,12 +141,14 @@ func serve(c net.Conn) {
 	}
 	servername := getSNIServerName(buf[:n])
 	if servername == "" {
+		glog.Debugf("no sni, send to default")
 		forward(c, buf[:n], getDefaultDST())
 		return
 	}
 	dst := getDST(c, servername)
 	if dst == "" {
 		dst = getDefaultDST()
+		glog.Debugf("use default dst %s for sni %s", dst, servername)
 	}
 	forward(c, buf[:n], dst)
 }
@@ -157,8 +157,11 @@ var cfg conf
 
 func main() {
 	var cfgfile string
+	var logfile string
+	var loglevel string
 	flag.StringVar(&cfgfile, "c", "config.yaml", "config file")
-	flag.Set("logtostderr", "true")
+	flag.StringVar(&logfile, "log_file", "", "log file")
+	flag.StringVar(&loglevel, "log_level", "INFO", "log level")
 	flag.Parse()
 
 	data, err := ioutil.ReadFile(cfgfile)
@@ -167,6 +170,18 @@ func main() {
 	}
 	if err := yaml.Unmarshal(data, &cfg); err != nil {
 		glog.Fatal(err)
+	}
+
+	if logfile != "" {
+		glog.Default.Out = &glog.FixedSizeFileWriter{
+			MaxCount: 4,
+			Name:     logfile,
+			MaxSize:  10 * 1024 * 1024,
+		}
+	}
+
+	if lv, err := glog.ParseLevel(loglevel); err == nil {
+		glog.Default.Level = lv
 	}
 
 	for _, d := range cfg.Listen {
