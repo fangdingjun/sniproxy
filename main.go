@@ -67,6 +67,7 @@ func forward(c net.Conn, data []byte, dst string) {
 	if len(ss) > 1 {
 		addr = ss[0]
 		raddr := c.RemoteAddr().(*net.TCPAddr)
+		glog.Debugf("connection from %s", raddr)
 		hdr = proxyproto.Header{
 			Version:            1,
 			Command:            proxyproto.PROXY,
