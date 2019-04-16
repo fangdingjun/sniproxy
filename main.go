@@ -6,7 +6,10 @@ import (
 	"io"
 	"io/ioutil"
 	"net"
+	"os"
+	"os/signal"
 	"strings"
+	"syscall"
 
 	glog "github.com/fangdingjun/go-log"
 	proxyproto "github.com/pires/go-proxyproto"
@@ -202,5 +205,11 @@ func main() {
 			}
 		}(l)
 	}
-	select {}
+
+	ch := make(chan os.Signal, 2)
+	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
+	select {
+	case s := <-ch:
+		glog.Printf("received signal %s, exit.", s)
+	}
 }
