@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"crypto/tls"
 	"io/ioutil"
 	"net"
@@ -36,7 +37,7 @@ func TestProxyProto(t *testing.T) {
 				log.Errorln(err)
 				return
 			}
-			go serve(conn)
+			go serve(context.Background(), conn)
 		}
 	}()
 	cert, err := tls.LoadX509KeyPair("server.crt", "server.key")
