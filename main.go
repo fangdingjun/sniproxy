@@ -20,7 +20,7 @@ import (
 
 func getSNIServerName(buf []byte) string {
 	n := len(buf)
-	if n < 5 {
+	if n <= 5 {
 		glog.Error("not tls handshake")
 		return ""
 	}
