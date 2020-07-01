@@ -7,7 +7,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/fangdingjun/go-log"
+	"github.com/fangdingjun/go-log/v5"
 	"github.com/fangdingjun/protolistener"
 	yaml "gopkg.in/yaml.v2"
 )

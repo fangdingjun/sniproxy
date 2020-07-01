@@ -13,7 +13,7 @@ import (
 	"syscall"
 	"time"
 
-	glog "github.com/fangdingjun/go-log"
+	glog "github.com/fangdingjun/go-log/v5"
 	proxyproto "github.com/pires/go-proxyproto"
 	yaml "gopkg.in/yaml.v2"
 )
