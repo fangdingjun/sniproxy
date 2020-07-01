@@ -23,7 +23,7 @@ func TestProxyProto(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	listener, err := net.Listen("tcp", "0.0.0.0:0")
+	listener, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -34,7 +34,6 @@ func TestProxyProto(t *testing.T) {
 		for {
 			conn, err := listener.Accept()
 			if err != nil {
-				log.Errorln(err)
 				return
 			}
 			go serve(context.Background(), conn)
@@ -44,7 +43,7 @@ func TestProxyProto(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	listener2, err := net.Listen("tcp", "0.0.0.0:8443")
+	listener2, err := net.Listen("tcp", "127.0.0.1:8443")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -68,18 +67,11 @@ func TestProxyProto(t *testing.T) {
 					log.Errorf("handshake error: %s", err)
 					return
 				}
-				log.Debugf("%+v", _conn.ConnectionState())
-				log.Debugf("addr: %s", addr.String())
-				//fmt.Fprintf(conn, "%s", addr.String())
-				//conn.Close()
 				conn.Write([]byte(addr.String()))
-				// time.Sleep(1 * time.Second)
-				log.Debugln("reply addr")
-				// conn.Close()
 			}(conn)
 		}
 	}()
-	//time.Sleep(1 * time.Second)
+
 	conn, err := tls.Dial("tcp", listener.Addr().String(), &tls.Config{
 		ServerName:         "www.example.com",
 		InsecureSkipVerify: true,

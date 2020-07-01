@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"testing"
 
@@ -17,7 +16,7 @@ func TestConf(t *testing.T) {
 	if err := yaml.Unmarshal(data, &c); err != nil {
 		t.Fatal(err)
 	}
-	fmt.Printf("%+v\n", c)
+	// fmt.Printf("%+v\n", c)
 	var testdata = map[string]string{
 		"www.example.com": "127.0.0.1:8443 proxy-v2",
 		"b.example.com":   "127.0.0.1:8542",
