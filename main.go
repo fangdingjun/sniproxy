@@ -74,13 +74,11 @@ func forward(ctx context.Context, c net.Conn, data []byte, dst string) {
 		raddr := c.RemoteAddr().(*net.TCPAddr)
 		glog.Debugf("connection from %s", raddr)
 		hdr = proxyproto.Header{
-			Version:            1,
-			Command:            proxyproto.PROXY,
-			TransportProtocol:  proxyproto.TCPv4,
-			SourceAddress:      raddr.IP.To4(),
-			DestinationAddress: net.IP{0, 0, 0, 0},
-			SourcePort:         uint16(raddr.Port),
-			DestinationPort:    0,
+			Version:           1,
+			Command:           proxyproto.PROXY,
+			TransportProtocol: proxyproto.TCPv4,
+			SourceAddr:        raddr,
+			DestinationAddr:   &net.TCPAddr{},
 		}
 
 		switch strings.ToLower(ss[1]) {
