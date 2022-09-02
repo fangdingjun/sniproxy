@@ -69,9 +69,11 @@ const (
 )
 
 // TLS compression types.
+/*
 const (
 	compressionNone uint8 = 0
 )
+*/
 
 // TLS extension numbers
 const (
@@ -107,9 +109,11 @@ const (
 
 // TLS Elliptic Curve Point Formats
 // http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-9
+/*
 const (
 	pointFormatUncompressed uint8 = 0
 )
+*/
 
 // TLS CertificateStatusType (RFC 3546)
 const (
@@ -117,6 +121,7 @@ const (
 )
 
 // Certificate types (for certificateRequestMsg)
+/*
 const (
 	certTypeRSASign    = 1 // A certificate containing an RSA key
 	certTypeDSSSign    = 2 // A certificate containing a DSA key
@@ -130,19 +135,24 @@ const (
 
 	// Rest of these are reserved by the TLS spec
 )
+*/
 
 // Hash functions for TLS 1.2 (See RFC 5246, section A.4.1)
+/*
 const (
 	hashSHA1   uint8 = 2
 	hashSHA256 uint8 = 4
 	hashSHA384 uint8 = 5
 )
+*/
 
 // Signature algorithms for TLS 1.2 (See RFC 5246, section A.4.1)
+/*
 const (
 	signatureRSA   uint8 = 1
 	signatureECDSA uint8 = 3
 )
+*/
 
 // signatureAndHash mirrors the TLS 1.2, SignatureAndHashAlgorithm struct. See
 // RFC 5246, section A.4.1.
@@ -153,6 +163,7 @@ type signatureAndHash struct {
 // supportedSignatureAlgorithms contains the signature and hash algorithms that
 // the code advertises as supported in a TLS 1.2 ClientHello and in a TLS 1.2
 // CertificateRequest.
+/*
 var supportedSignatureAlgorithms = []signatureAndHash{
 	{hashSHA256, signatureRSA},
 	{hashSHA256, signatureECDSA},
@@ -161,6 +172,7 @@ var supportedSignatureAlgorithms = []signatureAndHash{
 	{hashSHA1, signatureRSA},
 	{hashSHA1, signatureECDSA},
 }
+*/
 
 // ConnectionState records basic TLS details about the connection.
 type ConnectionState struct {
@@ -201,6 +213,7 @@ const (
 
 // ClientSessionState contains the state needed by clients to resume TLS
 // sessions.
+/*
 type ClientSessionState struct {
 	sessionTicket      []uint8               // Encrypted ticket used for session resumption with server
 	vers               uint16                // SSL/TLS version negotiated for the session
@@ -209,12 +222,14 @@ type ClientSessionState struct {
 	serverCertificates []*x509.Certificate   // Certificate chain presented by the server
 	verifiedChains     [][]*x509.Certificate // Certificate chains we built for verification
 }
+*/
 
 // ClientSessionCache is a cache of ClientSessionState objects that can be used
 // by a client to resume a TLS session with a given server. ClientSessionCache
 // implementations should expect to be called concurrently from different
 // goroutines. Only ticket-based resumption is supported, not SessionID-based
 // resumption.
+/*
 type ClientSessionCache interface {
 	// Get searches for a ClientSessionState associated with the given key.
 	// On return, ok is true if one was found.
@@ -223,6 +238,7 @@ type ClientSessionCache interface {
 	// Put adds the ClientSessionState to the cache with the given key.
 	Put(sessionKey string, cs *ClientSessionState)
 }
+*/
 
 /*
 // SignatureScheme identifies a signature algorithm supported by TLS. See

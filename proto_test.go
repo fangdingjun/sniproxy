@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"crypto/tls"
-	"io/ioutil"
 	"net"
+	"os"
 	"testing"
 
 	"github.com/fangdingjun/go-log/v5"
@@ -15,7 +15,7 @@ import (
 func TestProxyProto(t *testing.T) {
 	log.Default.Level = log.DEBUG
 
-	data, err := ioutil.ReadFile("config.sample.yaml")
+	data, err := os.ReadFile("config.sample.yaml")
 	if err != nil {
 		log.Fatal(err)
 	}

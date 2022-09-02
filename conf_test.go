@@ -1,14 +1,14 @@
 package main
 
 import (
-	"io/ioutil"
+	"os"
 	"testing"
 
 	yaml "gopkg.in/yaml.v2"
 )
 
 func TestConf(t *testing.T) {
-	data, err := ioutil.ReadFile("config.sample.yaml")
+	data, err := os.ReadFile("config.sample.yaml")
 	if err != nil {
 		t.Fatal(err)
 	}

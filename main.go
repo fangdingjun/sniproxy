@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net"
 	"os"
 	"os/signal"
@@ -78,7 +77,11 @@ func forward(ctx context.Context, c net.Conn, data []byte, dst string) {
 			Command:           proxyproto.PROXY,
 			TransportProtocol: proxyproto.TCPv4,
 			SourceAddr:        raddr,
-			DestinationAddr:   &net.TCPAddr{},
+			DestinationAddr: &net.TCPAddr{
+				IP:   []byte{0, 0, 0, 0},
+				Port: 0,
+				Zone: "",
+			},
 		}
 
 		switch strings.ToLower(ss[1]) {
@@ -186,7 +189,7 @@ func main() {
 	flag.StringVar(&loglevel, "log_level", "INFO", "log level")
 	flag.Parse()
 
-	data, err := ioutil.ReadFile(cfgfile)
+	data, err := os.ReadFile(cfgfile)
 	if err != nil {
 		glog.Fatal(err)
 	}
@@ -231,9 +234,7 @@ func main() {
 
 	ch := make(chan os.Signal, 2)
 	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
-	select {
-	case s := <-ch:
-		cancel()
-		glog.Printf("received signal %s, exit.", s)
-	}
+	s := <-ch
+	cancel()
+	glog.Printf("received signal %s, exit.", s)
 }
