@@ -2,8 +2,9 @@ github.com/fangdingjun/go-log/v5 v5.0.0 h1:vdh9Bk9C4ZFL6KoO6rII73zQIyaLf7hFdBvuc
 github.com/fangdingjun/go-log/v5 v5.0.0/go.mod h1:V012Oxo0/pSbccX4OFSp9MJglXwNsZo2ByBBorr7zzM=
 github.com/fangdingjun/protolistener v0.0.0-20210804081554-626e6590d6e7 h1:z5NlLvUNbGZxQhtUZELvIorAqpDmcIhGQXE5GdO7+5I=
 github.com/fangdingjun/protolistener v0.0.0-20210804081554-626e6590d6e7/go.mod h1:ljbjhI4fVrT5GwMu1iBhWTZwLJSqsXKwKlGKas5GudM=
-github.com/pires/go-proxyproto v0.6.0 h1:cLJUPnuQdiNf7P/wbeOKmM1khVdaMgTFDLj8h9ZrVYk=
 github.com/pires/go-proxyproto v0.6.0/go.mod h1:Odh9VFOZJCf9G8cLW5o435Xf1J95Jw9Gw5rnCjcwzAY=
+github.com/pires/go-proxyproto v0.6.1 h1:EBupykFmo22SDjv4fQVQd2J9NOoLPmyZA/15ldOGkPw=
+github.com/pires/go-proxyproto v0.6.1/go.mod h1:Odh9VFOZJCf9G8cLW5o435Xf1J95Jw9Gw5rnCjcwzAY=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 h1:/UOmuWzQfxxo9UtlXMwuQU8CMgg1eZXqTRwkSQJWKOI=
 golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97/go.mod h1:GvvjBRRGRdwPK5ydBHafDWAxML/pGHZbMvKqRZ5+Abc=
