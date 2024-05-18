@@ -1,0 +1,44 @@
+name: CD | Release
+
+on:
+  push:
+    tags: 
+      - 'v[0-9].[0-9]+.[0-9]+'
+
+jobs:
+  build:
+    name: Build & Release
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch:
+          - arm64
+          - amd64
+        os:
+          - darwin
+          - linux
+          - windows
+    env:
+      artifact_name: sniproxy-${{ matrix.os }}-${{ matrix.arch }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Download dependencies
+        run: go mod download
+
+      - name: Build
+        run: GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -v -o ${{ env.artifact_name }}
+
+      - name: Upload executable as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.artifact_name }}
+          path: ${{ env.artifact_name }}
+      
+      - name: Create a release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: ${{ env.artifact_name }}
+          draft: true
+          allowUpdates: true
