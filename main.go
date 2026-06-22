@@ -146,7 +146,7 @@ func getDefaultDST() string {
 func serve(ctx context.Context, c net.Conn) {
 	defer c.Close()
 
-	buf := make([]byte, 1024)
+	buf := make([]byte, 1024*4)
 	n, err := c.Read(buf)
 	if err != nil {
 		glog.Error(err)
