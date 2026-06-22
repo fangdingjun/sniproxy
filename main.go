@@ -39,7 +39,7 @@ func getSNIServerName(buf []byte) string {
 	// payload length
 	//l := int(buf[3])<<16 + int(buf[4])
 
-	//log.Printf("length: %d, got: %d", l, n)
+	//glog.Errorf("length: %d, got: %d", l, n)
 
 	// handshake message type
 	if uint8(buf[5]) != typeClientHello {
@@ -53,6 +53,7 @@ func getSNIServerName(buf []byte) string {
 
 	// client hello message not include tls header, 5 bytes
 	ret := msg.unmarshal(buf[5:n])
+	glog.Infof("%+v", msg)
 	if !ret {
 		glog.Error("parse hello message return false")
 		return ""
@@ -146,7 +147,7 @@ func getDefaultDST() string {
 func serve(ctx context.Context, c net.Conn) {
 	defer c.Close()
 
-	buf := make([]byte, 1024)
+	buf := make([]byte, 4096)
 	n, err := c.Read(buf)
 	if err != nil {
 		glog.Error(err)
