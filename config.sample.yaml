@@ -25,9 +25,9 @@ forward_rules:
     # send proxy protocol v1 header
     b.example.com: 127.0.0.1:8541 proxy-v1
     
-    # b.example.com forward to 127.0.0.1:8541
+    # c.example.com forward to 127.0.0.1:8541
     # no proxy protocol header send
-    b.example.com: 127.0.0.1:8542
+    c.example.com: 127.0.0.1:8542
 
     # forward by SNI, wildcard 
     # ex: SNI a.example.com from port 9999 forward to a.example.com:443
