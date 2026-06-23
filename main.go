@@ -156,7 +156,7 @@ func serve(ctx context.Context, c net.Conn) {
 	}
 
 	if recordType(buf[0]) != recordTypeHandshake {
-		glog.Debugf("not tls, send to default")
+		glog.Debugf("from %s, not tls, send to default", c.RemoteAddr())
 		c.SetDeadline(time.Time{})
 		forward(ctx, c, buf[:n], getDefaultDST())
 		return
@@ -166,7 +166,7 @@ func serve(ctx context.Context, c net.Conn) {
 	glog.Debugf("record len %d", recordLen)
 	if recordLen > 4096 {
 		c.SetDeadline(time.Time{})
-		glog.Debugf("length too long, may be not tls, send to default")
+		glog.Debugf("from %s, length too long, may be not tls, send to default", c.RemoteAddr())
 		forward(ctx, c, buf[:n], getDefaultDST())
 		return
 	}
@@ -185,7 +185,7 @@ func serve(ctx context.Context, c net.Conn) {
 
 	servername := getSNIServerName(buf[:n])
 	if servername == "" {
-		glog.Debugf("no sni, send to default")
+		glog.Debugf("from %s, no sni, send to default", c.RemoteAddr())
 		forward(ctx, c, buf[:n], getDefaultDST())
 		return
 	}
@@ -193,7 +193,7 @@ func serve(ctx context.Context, c net.Conn) {
 	// sni is ip address, ignore it, prevent dead loop
 	ip := net.ParseIP(servername)
 	if ip != nil {
-		glog.Debugf("sni %s, send to default", ip.String())
+		glog.Debugf("from %s, sni %s, send to default", c.RemoteAddr(), ip.String())
 		forward(ctx, c, buf[:n], getDefaultDST())
 		return
 	}
