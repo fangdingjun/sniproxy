@@ -1044,7 +1044,7 @@ func (m *serverHelloMsg) originalBytes() []byte {
 	return m.original
 }
 */
-
+/*
 type encryptedExtensionsMsg struct {
 	alpnProtocol            string
 	quicTransportParameters []byte
@@ -1052,6 +1052,7 @@ type encryptedExtensionsMsg struct {
 	echRetryConfigs         []byte
 	serverNameAck           bool
 }
+*/
 
 /*
 func (m *encryptedExtensionsMsg) marshal() ([]byte, error) {
@@ -1097,7 +1098,7 @@ func (m *encryptedExtensionsMsg) marshal() ([]byte, error) {
 	return b.Bytes()
 }
 */
-
+/*
 func (m *encryptedExtensionsMsg) unmarshal(data []byte) bool {
 	*m = encryptedExtensionsMsg{}
 	s := cryptobyte.String(data)
@@ -1164,6 +1165,7 @@ func (m *encryptedExtensionsMsg) unmarshal(data []byte) bool {
 
 	return true
 }
+*/
 
 /*
 
