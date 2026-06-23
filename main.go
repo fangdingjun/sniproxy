@@ -53,7 +53,7 @@ func getSNIServerName(buf []byte) string {
 
 	// client hello message not include tls header, 5 bytes
 	ret := msg.unmarshal(buf[5:n])
-	glog.Infof("%+v", msg)
+	//glog.Infof("%+v", msg)
 	if !ret {
 		glog.Error("parse hello message return false")
 		return ""
@@ -147,12 +147,42 @@ func getDefaultDST() string {
 func serve(ctx context.Context, c net.Conn) {
 	defer c.Close()
 
-	buf := make([]byte, 4096)
+	c.SetDeadline(time.Now().Add(5 * time.Second))
+	buf := make([]byte, 1024*4)
 	n, err := c.Read(buf)
 	if err != nil {
 		glog.Error(err)
 		return
 	}
+
+	if recordType(buf[0]) != recordTypeHandshake {
+		glog.Debugf("not tls, send to default")
+		c.SetDeadline(time.Time{})
+		forward(ctx, c, buf[:n], getDefaultDST())
+		return
+	}
+
+	recordLen := uint16(buf[3])<<8 | uint16(buf[4])
+	glog.Debugf("record len %d", recordLen)
+	if recordLen > 4096 {
+		c.SetDeadline(time.Time{})
+		glog.Debugf("length too long, may be not tls, send to default")
+		forward(ctx, c, buf[:n], getDefaultDST())
+		return
+	}
+
+	if n < int(recordLen+5) {
+		c.SetDeadline(time.Now().Add(5 * time.Second))
+		n1, err := io.ReadFull(c, buf[n:recordLen+5])
+		if err != nil {
+			glog.Error(err)
+			return
+		}
+		n = n + n1
+	}
+
+	c.SetDeadline(time.Time{})
+
 	servername := getSNIServerName(buf[:n])
 	if servername == "" {
 		glog.Debugf("no sni, send to default")
